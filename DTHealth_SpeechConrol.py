@@ -19,8 +19,8 @@ if __name__ == "__main__":
     
     sttai = DTHealth_AI_STT.DTH_STT()
     audiodevice = DTHealth_AudioDevice.DTH_Audio_Device()
-    audiodevice.setagree(".\\sound\\greeting\\")
-    audiodevice.setgreeting(".\\sound\\agree\\")
+    audiodevice.setagree(".\\sound\\agree\\")
+    audiodevice.setgreeting(".\\sound\\greeting\\")
     statemacine = DTHealth_State_Macine.DTHealth_StateMacine()
 
     audiodevice.start()
@@ -59,25 +59,28 @@ if __name__ == "__main__":
                 print(patientconditions)
                 print(patientRequests)
 
-                audiodevice.sayText(result.text)
 
                 # Send the evaluated dictionaries to the api
-                #for vital in vitals:
-                #    res = api.post_update_vitals(vital)
-                #    if res != 200:
-                #        print(f'API returned Error Code: {res}')
-                #for medication in medications:
-                #    res = api.post_update_medication(medication)
-                #    if res != 200:
-                #        print(f'API returned Error Code: {res}')
-                #for patientcondition in patientconditions:
-                #    res = api.post_update_patientcondition(patientcondition)
-                #    if res != 200:
-                #        print(f'API returned Error Code: {res}')
-                #for patientRequest in patientRequests:
-                #    res = api.post_new_patientRequest(patientRequest)
-                #    if res != 200:
-                #        print(f'API returned Error Code: {res}')
+                for vital in vitals:
+                    res = api.post_update_vitals(vital)
+                    if len(res) > 1:
+                        print(f'API returned Error Code: {res}')
+                        audiodevice.sayText(res)
+                for medication in medications:
+                    res = api.post_update_medication(medication)
+                    if len(res) > 1:
+                        print(f'API returned Error Code: {res}')
+                        audiodevice.sayText(res)
+                for patientcondition in patientconditions:
+                    res = api.post_update_patientcondition(patientcondition)
+                    if len(res) > 1:
+                        print(f'API returned Error Code: {res}')
+                        audiodevice.sayText(res)
+                for patientRequest in patientRequests:
+                    res = api.post_new_patientRequest(patientRequest)
+                    if len(res) > 1:
+                        print(f'API returned Error Code: {res}')
+                        audiodevice.sayText(res)
 
                 
 

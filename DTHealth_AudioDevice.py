@@ -1,3 +1,4 @@
+from cgi import test
 from os import listdir
 from os.path import isfile, join
 import sounddevice
@@ -13,7 +14,7 @@ from botocore.exceptions import BotoCoreError, ClientError
 from contextlib import closing
 import os
 from tempfile import gettempdir
-
+import time
 
 
 
@@ -30,15 +31,17 @@ class DTH_Audio_Device:
         self.standart = 0
         self.polly = boto3.client('polly')
         print(sounddevice.query_devices())
-        #sounddevice.default.device = [4, inpdev] 
+        #sounddevice.default.device = (inpdev, 13)
         sounddevice.default.channels = 1
         #Input Stream
         self.input_stream_keyword = sounddevice.InputStream(samplerate=self.sf, device=inpdev, channels=1, blocksize=self.sf)
     
     def sayAgreeFraze(self):
         sounddevice.playrec(random.choice(self.ageefrazes), self.standart)
+        status = sounddevice.wait() 
     def sayGreetingFraze(self):
         sounddevice.playrec(random.choice(self.greetingfrazes), self.standart)
+        status = sounddevice.wait() 
 
     def start(self):
         self.input_stream_keyword.start()
@@ -59,17 +62,20 @@ class DTH_Audio_Device:
     
     def sayText(self, text :str = "exampletext"):
         try:
+            print("Text der gesagt weren Soll:", text)
             response = self.polly.synthesize_speech(Text=text, OutputFormat="pcm", VoiceId="Vicki", SampleRate="16000")
-
+            time.sleep(1)
         except(BotoCoreError, ClientError) as error:
             print(error)
             sys.exit(-1)
 
         if "AudioStream" in response:
             with closing(response["AudioStream"]) as stream:
-
-                data = np.frombuffer(stream.read(), dtype=int)
-                sounddevice.playrec(data, 9000)
+                
+                retdate = stream.read()
+                
+                data = np.frombuffer(retdate, dtype=np.int16)
+                sounddevice.playrec(data, 16000)
 
         else:
             print("Could not stream audio")
