@@ -9,13 +9,16 @@ import DTHealth_AI_STT
 import DTHealth_AudioDevice
 import DTHealth_State_Macine
 
+import Utils.interpreter
+import Utils.translator
+
 
 if __name__ == "__main__":
     
     sttai = DTHealth_AI_STT.DTH_STT("medium", "medium")
     audiodevice = DTHealth_AudioDevice.DTH_Audio_Device()
-    audiodevice.setagree(".\\Zustimmen_Gerne\\")
-    audiodevice.setgreeting(".\\Standart_Gerne\\")
+    audiodevice.setagree(".\\sound\\greeting\\")
+    audiodevice.setgreeting(".\\sound\\agree\\")
     statemacine = DTHealth_State_Macine.DTHealth_StateMacine()
 
     audiodevice.start()
@@ -42,6 +45,23 @@ if __name__ == "__main__":
                 result = sttai.Stop_Quarry()
                 audiodevice.sayAgreeFraze()
                 print(result.text)
+                #print(sttai.getlanguage(result))
+                
+                outkeys = Utils.interpreter.interpreter(result.text)
+
+                print(outkeys)
+
+                _1, _2, _3, _4 = outkeys
+
+                print(_1)
+                print(_2)
+                print(_3)
+                print(_4)
+
+
+
+
+
         
 
 

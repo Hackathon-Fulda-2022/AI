@@ -48,8 +48,8 @@ class DTH_STT:
         return outAudio
 
     def getlanguage(self, inp:str)->str:
-        print("Not Implemented")
-        pass
+        _, probs = inp
+        return max(inp, key=inp.get)
 
     def do_blocking_decode(self, sound_Array: np.ndarray, model:whisper.model,options: whisper.DecodingOptions) -> str:
         
