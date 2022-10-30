@@ -1,0 +1,6 @@
+[submodule "Utils"]
+	path = Utils
+	url = https://github.com/Hackathon-Fulda-2022/Utils.git
+[submodule "API"]
+	path = API
+	url = https://github.com/Hackathon-Fulda-2022/API.git
