@@ -37,6 +37,7 @@ class DTH_STT:
 
         return result
 
+
     def setInitialVoiceDate(self, array: np.ndarray):
         self.voiceDataCommand = array
         self.voice_data1 = array

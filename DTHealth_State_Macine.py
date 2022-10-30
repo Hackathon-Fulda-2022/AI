@@ -2,7 +2,7 @@
 
 class DTHealth_StateMacine:
     
-    def __init__(self, catchfrazeStart: str = ["anna", "hallo"],  catchfrazeStop: str = ["anna", "danke"]):
+    def __init__(self, catchfrazeStart: str = [["anna", "hallo"], ["anna", "hello"]],  catchfrazeStop: str = ["anna", "danke"]):
         print("Inizalizise State Macine")
         self.CommandState = False
         self.NormalState = False
@@ -23,7 +23,7 @@ class DTHealth_StateMacine:
 
     def eval_start_state(self, message: str)-> bool:
         message = message.lower()
-        if all(x in message for x in self.catchfrazeStart):
+        if all(x in message for x in self.catchfrazeStart[0]) or all(x in message for x in self.catchfrazeStart[1]):
             return True
         else:
             return False

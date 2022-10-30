@@ -12,10 +12,12 @@ import DTHealth_State_Macine
 import Utils.interpreter
 import Utils.translator
 
+from API.api_lib import hackathon_api
+
 
 if __name__ == "__main__":
     
-    sttai = DTHealth_AI_STT.DTH_STT("medium", "medium")
+    sttai = DTHealth_AI_STT.DTH_STT()
     audiodevice = DTHealth_AudioDevice.DTH_Audio_Device()
     audiodevice.setagree(".\\sound\\greeting\\")
     audiodevice.setgreeting(".\\sound\\agree\\")
@@ -23,6 +25,8 @@ if __name__ == "__main__":
 
     audiodevice.start()
     sttai.setInitialVoiceDate(audiodevice.readBlock())
+
+    api = hackathon_api()
 
     print("Start Main Loop")
     while True:
@@ -36,6 +40,7 @@ if __name__ == "__main__":
         if statemacine.CommandState:
             sttai.Quarry_Cont_data(audioblock)
 
+
         if statemacine.eval_st_sp_state(result.text):
 
             if statemacine.CommandState:
@@ -45,18 +50,36 @@ if __name__ == "__main__":
                 result = sttai.Stop_Quarry()
                 audiodevice.sayAgreeFraze()
                 print(result.text)
-                #print(sttai.getlanguage(result))
                 
                 outkeys = Utils.interpreter.interpreter(result.text)
+                vitals, medications, patientconditions, patientRequests = outkeys
 
-                print(outkeys)
+                print(vitals)
+                print(medications)
+                print(patientconditions)
+                print(patientRequests)
 
-                _1, _2, _3, _4 = outkeys
+                audiodevice.sayText(result.text)
 
-                print(_1)
-                print(_2)
-                print(_3)
-                print(_4)
+                # Send the evaluated dictionaries to the api
+                #for vital in vitals:
+                #    res = api.post_update_vitals(vital)
+                #    if res != 200:
+                #        print(f'API returned Error Code: {res}')
+                #for medication in medications:
+                #    res = api.post_update_medication(medication)
+                #    if res != 200:
+                #        print(f'API returned Error Code: {res}')
+                #for patientcondition in patientconditions:
+                #    res = api.post_update_patientcondition(patientcondition)
+                #    if res != 200:
+                #        print(f'API returned Error Code: {res}')
+                #for patientRequest in patientRequests:
+                #    res = api.post_new_patientRequest(patientRequest)
+                #    if res != 200:
+                #        print(f'API returned Error Code: {res}')
+
+                
 
 
 
